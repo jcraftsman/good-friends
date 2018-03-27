@@ -19,22 +19,26 @@ from unittest.mock import Mock
 #   Bob payed 30             Alice owes Bob 20€
 #   Bob payed 50             Alice owes Bob 20€
 #
+#   Bob payed 100€
 
 
 def compute_balance_fifty_fifty(expenses_made, friends):
     expense = expenses_made
     number_of_friends = len(friends)
     debt = expense / number_of_friends
-    production_code = debt
-    return production_code
+    return debt
+
+def get_debitor_list(friends, payer):
+    comparator = lambda x: -1 if x == payer else 1
+    friends_sorted_with_payer_first = sorted(friends, key=comparator)
+    debitors = friends_sorted_with_payer_first[1:]
+    return debitors
 
 class TestGoodFriends(TestCase):
-
-
     def setUp(self):
         pass
-
     # TODO: Introduce the concept of money later
+
     def test_Bob_payed_40_euro_split_fifty_fifty_Alice_owes_20_euro_to_Bob(self):
         # Arrange
         expected = 20
@@ -69,4 +73,31 @@ class TestGoodFriends(TestCase):
         actual = compute_balance_fifty_fifty(expenses_made, friends)
 
         # Assert
+        self.assertEquals(expected, actual)
+
+    def test_Bob_payed_an_amount_Alice_is_debitor_to_Bob(self):
+        payer = "Bob";
+        friends = ["Bob", "Alice"]
+        expected = ["Alice"]
+
+        actual = get_debitor_list(friends, payer)
+
+        self.assertEquals(expected, actual)
+
+    def test_Bob_payed_an_amount_Alice_and_John_are_debitors_to_Bob(self):
+        payer = "Bob"
+        friends = ["Bob", "Alice", "John"]
+        expected = ["Alice", "John"]
+
+        actual = get_debitor_list(friends, payer)
+
+        self.assertEquals(expected, actual)
+
+    def test_Bob_payed_an_amount_Alice_John_and_Claire_are_debitors_to_Bob(self):
+        payer = "Bob"
+        friends = ["Bob", "Alice", "John", "Claire"]
+        expected = ["Alice", "John", "Claire"]
+
+        actual = get_debitor_list(friends, payer)
+
         self.assertEquals(expected, actual)
