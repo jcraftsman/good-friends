@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import Mock
+
 
 # Think -> Red -> Green -> Refactor
 #
@@ -28,15 +28,19 @@ def compute_balance_fifty_fifty(expenses_made, friends):
     debt = expense / number_of_friends
     return debt
 
-def get_debitor_list(friends, payer):
-    comparator = lambda x: -1 if x == payer else 1
+
+def get_debtor_list(friends, payer):
+    def comparator(x): return -1 if x == payer else 1
+
     friends_sorted_with_payer_first = sorted(friends, key=comparator)
-    debitors = friends_sorted_with_payer_first[1:]
-    return debitors
+    debtors = friends_sorted_with_payer_first[1:]
+    return debtors
+
 
 class TestGoodFriends(TestCase):
     def setUp(self):
         pass
+
     # TODO: Introduce the concept of money later
 
     def test_Bob_payed_40_euro_split_fifty_fifty_Alice_owes_20_euro_to_Bob(self):
@@ -66,7 +70,7 @@ class TestGoodFriends(TestCase):
     def test_Bob_payed_120_split_fifty_fifty_AliceAndJohn_owe_40_each_toBob(self):
         # Arrange
         expected = 40
-        expenses_made = 120;
+        expenses_made = 120
         friends = ["Bob", "Alice", "John"]
 
         # Act
@@ -76,28 +80,37 @@ class TestGoodFriends(TestCase):
         self.assertEquals(expected, actual)
 
     def test_Bob_payed_an_amount_Alice_is_debitor_to_Bob(self):
-        payer = "Bob";
+        # Arrange
+        payer = "Bob"
         friends = ["Bob", "Alice"]
         expected = ["Alice"]
 
-        actual = get_debitor_list(friends, payer)
+        # Act
+        actual = get_debtor_list(friends, payer)
 
+        # Assert
         self.assertEquals(expected, actual)
 
-    def test_Bob_payed_an_amount_Alice_and_John_are_debitors_to_Bob(self):
+    def test_Bob_payed_an_amount_Alice_and_John_are_debtors_to_Bob(self):
+        # Arrange
         payer = "Bob"
         friends = ["Bob", "Alice", "John"]
         expected = ["Alice", "John"]
 
-        actual = get_debitor_list(friends, payer)
+        # Act
+        actual = get_debtor_list(friends, payer)
 
+        # Assert
         self.assertEquals(expected, actual)
 
-    def test_Bob_payed_an_amount_Alice_John_and_Claire_are_debitors_to_Bob(self):
+    def test_Bob_payed_an_amount_Alice_John_and_Claire_are_debtors_to_Bob(self):
+        # Arrange
         payer = "Bob"
         friends = ["Bob", "Alice", "John", "Claire"]
         expected = ["Alice", "John", "Claire"]
 
-        actual = get_debitor_list(friends, payer)
+        # Act
+        actual = get_debtor_list(friends, payer)
 
+        # Assert
         self.assertEquals(expected, actual)
