@@ -29,7 +29,7 @@ JOHN = "John"
 CLAIRE = "Claire"
 
 
-def compute_uniform_debt(expenses_made, friends):
+def compute_uniform_debt(friends, expenses_made):
     expense = expenses_made
     number_of_friends = len(friends)
     debt = expense / number_of_friends
@@ -54,7 +54,7 @@ class TestGoodFriends(TestCase):
         friends = [BOB_THE_PAYER, ALICE]
 
         # Act
-        actual = compute_uniform_debt(expenses_made, friends)
+        actual = compute_uniform_debt(friends, expenses_made)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -66,7 +66,7 @@ class TestGoodFriends(TestCase):
         friends = [BOB_THE_PAYER, ALICE]
 
         # Act
-        actual = compute_uniform_debt(expenses_made, friends)
+        actual = compute_uniform_debt(friends, expenses_made)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -78,7 +78,7 @@ class TestGoodFriends(TestCase):
         friends = [BOB_THE_PAYER, ALICE, JOHN]
 
         # Act
-        actual = compute_uniform_debt(expenses_made, friends)
+        actual = compute_uniform_debt(friends, expenses_made)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -129,7 +129,7 @@ class TestGoodFriends(TestCase):
         # Production
         debtor = get_debtors(friends, payer).pop()
         payments_amount = sum(payments)
-        debt = compute_uniform_debt(payments_amount, friends)
+        debt = compute_uniform_debt(friends, payments_amount)
         production = [{debtor: debt}]
 
         # Act
