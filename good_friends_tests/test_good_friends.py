@@ -15,6 +15,10 @@ from unittest import TestCase
 #               split 50-50
 #   Inputs                  Outputs
 #   Bob payed 40€          Alice owes Bob 20€
+#
+#   Bob payed 120€,
+#   Bob payed 30€          Alice owes Bob 75€
+#
 #             split by consumption
 #   Bob payed 30             Alice owes Bob 20€
 #   Bob payed 50             Alice owes Bob 20€
@@ -111,3 +115,22 @@ class TestGoodFriends(TestCase):
 
         # Assert
         self.assertEquals(expected, actual)
+
+    def test_Bob_payed_20_for_Bob_and_Alice_and_Bob_payed_30_for_Bob_and_Alice_Alice_owes_25_to_Bob(self):
+        # Arrange
+        payments = [20, 30]
+        payer = "Bob"
+        friends = ["Bob", "Alice"]
+        expected = {"Alice": 25}
+
+        # Production
+        debtor = get_debtors(friends, payer).pop()
+        payments_amount = sum(payments)
+        debt = compute_uniform_debt(payments_amount, friends)
+        production = [{debtor: debt}]
+
+        # Act
+        debts_details = production
+
+        # Assert
+        self.assertIn(expected, debts_details)
