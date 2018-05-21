@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-
 # Think -> Red -> Green -> Refactor
 #
 # Guideline 1: Always start with outputs
@@ -24,6 +23,10 @@ from unittest import TestCase
 #   Bob payed 50             Alice owes Bob 20€
 #
 #   Bob payed 100€
+BOB_THE_PAYER = "Bob"
+ALICE = "Alice"
+JOHN = "John"
+CLAIRE = "Claire"
 
 
 def compute_uniform_debt(expenses_made, friends):
@@ -48,7 +51,7 @@ class TestGoodFriends(TestCase):
         # Arrange
         expected = 20
         expenses_made = 40
-        friends = ["Bob", "Alice"]
+        friends = [BOB_THE_PAYER, ALICE]
 
         # Act
         actual = compute_uniform_debt(expenses_made, friends)
@@ -60,7 +63,7 @@ class TestGoodFriends(TestCase):
         # Arrange
         expected = 50
         expenses_made = 100
-        friends = ["Bob", "Alice"]
+        friends = [BOB_THE_PAYER, ALICE]
 
         # Act
         actual = compute_uniform_debt(expenses_made, friends)
@@ -72,7 +75,7 @@ class TestGoodFriends(TestCase):
         # Arrange
         expected = 40
         expenses_made = 120
-        friends = ["Bob", "Alice", "John"]
+        friends = [BOB_THE_PAYER, ALICE, JOHN]
 
         # Act
         actual = compute_uniform_debt(expenses_made, friends)
@@ -82,9 +85,9 @@ class TestGoodFriends(TestCase):
 
     def test_Bob_payed_an_amount_Alice_is_debitor_to_Bob(self):
         # Arrange
-        payer = "Bob"
-        friends = ["Bob", "Alice"]
-        expected = {"Alice"}
+        payer = BOB_THE_PAYER
+        friends = [BOB_THE_PAYER, ALICE]
+        expected = {ALICE}
 
         # Act
         actual = get_debtors(friends, payer)
@@ -94,9 +97,9 @@ class TestGoodFriends(TestCase):
 
     def test_Bob_payed_an_amount_Alice_and_John_are_debtors_to_Bob(self):
         # Arrange
-        payer = "Bob"
-        friends = ["Bob", "Alice", "John"]
-        expected = {"Alice", "John"}
+        payer = BOB_THE_PAYER
+        friends = [BOB_THE_PAYER, ALICE, JOHN]
+        expected = {ALICE, JOHN}
 
         # Act
         actual = get_debtors(friends, payer)
@@ -106,9 +109,9 @@ class TestGoodFriends(TestCase):
 
     def test_Bob_payed_an_amount_Alice_John_and_Claire_are_debtors_to_Bob(self):
         # Arrange
-        payer = "Bob"
-        friends = ["Bob", "Alice", "John", "Claire"]
-        expected = {"Alice", "John", "Claire"}
+        payer = BOB_THE_PAYER
+        friends = [BOB_THE_PAYER, ALICE, JOHN, CLAIRE]
+        expected = {ALICE, JOHN, CLAIRE}
 
         # Act
         actual = get_debtors(friends, payer)
@@ -119,9 +122,9 @@ class TestGoodFriends(TestCase):
     def test_Bob_payed_20_for_Bob_and_Alice_and_Bob_payed_30_for_Bob_and_Alice_Alice_owes_25_to_Bob(self):
         # Arrange
         payments = [20, 30]
-        payer = "Bob"
-        friends = ["Bob", "Alice"]
-        expected = {"Alice": 25}
+        payer = BOB_THE_PAYER
+        friends = [BOB_THE_PAYER, ALICE]
+        expected = {ALICE: 25}
 
         # Production
         debtor = get_debtors(friends, payer).pop()
