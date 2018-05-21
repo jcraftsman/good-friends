@@ -22,26 +22,23 @@ from unittest import TestCase
 #   Bob payed 100€
 
 
-def compute_balance_fifty_fifty(expenses_made, friends):
+def compute_uniform_debt(expenses_made, friends):
     expense = expenses_made
     number_of_friends = len(friends)
     debt = expense / number_of_friends
     return debt
 
 
-def get_debtor_list(friends, payer):
-    def comparator(x): return -1 if x == payer else 1
-
-    friends_sorted_with_payer_first = sorted(friends, key=comparator)
-    debtors = friends_sorted_with_payer_first[1:]
-    return debtors
+def get_debtors(friends, payer):
+    return set(friends) - {payer}
 
 
 class TestGoodFriends(TestCase):
-    def setUp(self):
-        pass
 
     # TODO: Introduce the concept of money later
+
+    def setUp(self):
+        pass
 
     def test_Bob_payed_40_euro_split_fifty_fifty_Alice_owes_20_euro_to_Bob(self):
         # Arrange
@@ -50,7 +47,7 @@ class TestGoodFriends(TestCase):
         friends = ["Bob", "Alice"]
 
         # Act
-        actual = compute_balance_fifty_fifty(expenses_made, friends)
+        actual = compute_uniform_debt(expenses_made, friends)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -62,7 +59,7 @@ class TestGoodFriends(TestCase):
         friends = ["Bob", "Alice"]
 
         # Act
-        actual = compute_balance_fifty_fifty(expenses_made, friends)
+        actual = compute_uniform_debt(expenses_made, friends)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -74,7 +71,7 @@ class TestGoodFriends(TestCase):
         friends = ["Bob", "Alice", "John"]
 
         # Act
-        actual = compute_balance_fifty_fifty(expenses_made, friends)
+        actual = compute_uniform_debt(expenses_made, friends)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -83,10 +80,10 @@ class TestGoodFriends(TestCase):
         # Arrange
         payer = "Bob"
         friends = ["Bob", "Alice"]
-        expected = ["Alice"]
+        expected = {"Alice"}
 
         # Act
-        actual = get_debtor_list(friends, payer)
+        actual = get_debtors(friends, payer)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -95,10 +92,10 @@ class TestGoodFriends(TestCase):
         # Arrange
         payer = "Bob"
         friends = ["Bob", "Alice", "John"]
-        expected = ["Alice", "John"]
+        expected = {"Alice", "John"}
 
         # Act
-        actual = get_debtor_list(friends, payer)
+        actual = get_debtors(friends, payer)
 
         # Assert
         self.assertEquals(expected, actual)
@@ -107,10 +104,10 @@ class TestGoodFriends(TestCase):
         # Arrange
         payer = "Bob"
         friends = ["Bob", "Alice", "John", "Claire"]
-        expected = ["Alice", "John", "Claire"]
+        expected = {"Alice", "John", "Claire"}
 
         # Act
-        actual = get_debtor_list(friends, payer)
+        actual = get_debtors(friends, payer)
 
         # Assert
         self.assertEquals(expected, actual)
